@@ -3,6 +3,7 @@
 This file is to help you out on what the files mean and there purpose. If you have any questions, feel free to reach out!
 
 **Filename:** marinus_taxonomy.csv
+
 **Purpose:** This file contains taxonomic information that can be used to produle a phylogenetic tree. We should be using the genus information as the cut off.
 i
 
@@ -21,6 +22,7 @@ i
 
 
 **Filename:** dnds_constant_15.csv 
+
 **Purpose:** This file contains the dN/dS values. dN/dS above 1 is postive selection (generally shown in red) and a dN/dS below 1 is negative selection (generally shown in blue). The most important columns here are A, B, and dNdS_ratio_constant.
 
 
