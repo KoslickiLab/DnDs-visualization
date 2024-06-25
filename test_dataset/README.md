@@ -32,12 +32,12 @@ i
 | ksize | the size of the subsets used for sketching |
 | containment_protein | containment estimated among protein sequences of genomes A and B |
 | sequence_comparison | comparison between genome name A and B |
-| dN_constant: estimated nonsynonymous mutations with constant |
-| dS_constant: estimated synonymous mutations with constant |
-| dN: estimated nonsynonymous mutations |
-| dS: estimated synonymous mutations |
-| dNdS_ratio: the estimated dN/dS without constant |
-| dNdS_ratio_constant: the estimated dN/dS with constant |
+| dN_constant | estimated nonsynonymous mutations with constant |
+| dS_constant | estimated synonymous mutations with constant |
+| dN | estimated nonsynonymous mutations |
+| dS | estimated synonymous mutations |
+| dNdS_ratio | the estimated dN/dS without constant |
+| dNdS_ratio_constant | the estimated dN/dS with constant |
 
 
 
