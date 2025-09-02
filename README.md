@@ -2,6 +2,8 @@
 
 A reproducible script to generate the Hierarchical Edge Bundling Figure presented in manuscript for "Leveraging FracMinHash Containment for Genomic dN/dS". 
 
+![Figure](./Hierarchical_Edge_Bundling_tree/GTDB/output_100samples.png)
+
 # Table of contents
 
 - [Environment setupe](#Environment-Setup)
@@ -76,8 +78,13 @@ i
 
 Please follow and run jupyter notebook instructions here: [DnDs-visualization/Hierarchical_Edge_Bundling_tree/GTDB/test-code_GTDB copy_jzr_modify.ipynb](https://github.com/KoslickiLab/DnDs-visualization/blob/main/Hierarchical_Edge_Bundling_tree/GTDB/test-code_GTDB%20copy_jzr_modify.ipynb)
 
-![Figure](./Hierarchical_Edge_Bundling_tree/GTDB/output_100samples.png)
+<!-- ![Figure](./Hierarchical_Edge_Bundling_tree/GTDB/output_100samples.png) -->
 
 # Acknowledgements
 
 Thank you Jinglin Feng for your contributions to this figure!
+
+# Citations
+
+Leveraging FracMinHash Containment for Genomic dN /dS. Judith S. Rodriguez,
+Mahmudur Rahman Hera, and David Koslicki. In preparation.
