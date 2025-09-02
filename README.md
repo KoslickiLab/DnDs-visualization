@@ -58,3 +58,5 @@ i
 # Figure Generation
 
 Please follow and run jupyter note instruction here: [DnDs-visualization/Hierarchical_Edge_Bundling_tree/GTDB/test-code_GTDB copy_jzr_modify.ipynb](https://github.com/KoslickiLab/DnDs-visualization/blob/main/Hierarchical_Edge_Bundling_tree/GTDB/test-code_GTDB%20copy_jzr_modify.ipynb)
+
+![Figure](./Hierarchical_Edge_Bundling_tree/GTDB/output_100samples.png)
