@@ -7,10 +7,27 @@ A reproducible script to generate the Hierarchical Edge Bundling Figure presente
 - [Environment setupe](#Environment-Setup)
 - [Dataset Information](#Dataset-Information)
 - [Figure Generation](#Figure-Generation)
+- [Acknowledgements](#Acknowledgements)
 
 # Environment Setup
 
-what packages are used, datasets?
+Create either a conda or pip environment to reproduce this figure.
+
+## Conda environment
+
+```
+conda env create -f environment.yml
+conda activate hierarchical_env
+```
+
+## Pip environment
+
+```
+python3 -m venv hierarchical_pip_env
+source hierarchical_pip_env/bin/activate
+pip install -r requirements.txt
+```
+
 
 # Dataset Information
 
@@ -57,6 +74,10 @@ i
 
 # Figure Generation
 
-Please follow and run jupyter note instruction here: [DnDs-visualization/Hierarchical_Edge_Bundling_tree/GTDB/test-code_GTDB copy_jzr_modify.ipynb](https://github.com/KoslickiLab/DnDs-visualization/blob/main/Hierarchical_Edge_Bundling_tree/GTDB/test-code_GTDB%20copy_jzr_modify.ipynb)
+Please follow and run jupyter notebook instructions here: [DnDs-visualization/Hierarchical_Edge_Bundling_tree/GTDB/test-code_GTDB copy_jzr_modify.ipynb](https://github.com/KoslickiLab/DnDs-visualization/blob/main/Hierarchical_Edge_Bundling_tree/GTDB/test-code_GTDB%20copy_jzr_modify.ipynb)
 
 ![Figure](./Hierarchical_Edge_Bundling_tree/GTDB/output_100samples.png)
+
+# Acknowledgements
+
+Thank you Jinglin Feng for your contributions to this figure!
