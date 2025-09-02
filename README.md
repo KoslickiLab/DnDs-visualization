@@ -10,6 +10,8 @@ Hierarchical edge bundling is an easy way to display quantitative pairwise relat
 - [Dataset Information](#Dataset-Information)
 - [Figure Generation](#Figure-Generation)
 - [Acknowledgements](#Acknowledgements)
+- [References](#References)
+- [Our paper](#Our-paper)
 
 # Environment Setup
 
@@ -84,11 +86,11 @@ Please follow and run jupyter notebook instructions here: [DnDs-visualization/Hi
 
 Thank you Jinglin Feng for your contributions to this figure!
 
-# Citations
+# References
 
 [1] D. Holten (2006). Hierarchical Edge Bundles: Visualization of Adjacency Relations in Hierarchical Data. IEEE Transactions on Visualization and Computer Graphics, 12(5)
 
-# Please cite
+# Our paper
 
 Leveraging FracMinHash Containment for Genomic dN /dS. Judith S. Rodriguez,
 Mahmudur Rahman Hera, and David Koslicki. In preparation.
