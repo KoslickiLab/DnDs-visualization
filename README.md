@@ -7,6 +7,8 @@ Hierarchical edge bundling is an easy way to display quantitative pairwise relat
 # Table of contents
 
 - [Environment setupe](#Environment-Setup)
+    - [Conda](#Conda-environment)
+    - [Pip](#Pip-environment)
 - [Dataset Information](#Dataset-Information)
 - [Figure Generation](#Figure-Generation)
 - [Acknowledgements](#Acknowledgements)
