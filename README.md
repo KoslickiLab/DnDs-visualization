@@ -34,6 +34,11 @@ source hierarchical_pip_env/bin/activate
 pip install -r requirements.txt
 ```
 
+# Quick start
+
+Please execute the following script to generate figure:
+
+```Rscript script.r --input fmh_omega_7.csv --taxonomy species```
 
 # Dataset Information
 
@@ -62,7 +67,7 @@ These files contain taxonomic information of archaeal and bacterial genomes that
 | species | taxonomix classifier |
 | strain | taxonomix classifier |
 
-## Input dataset
+## Input
 
 We include the a FracMinHash dN/dS result to generate this figure.
 
@@ -91,10 +96,6 @@ Note: Currently, this file is not available on the repo, if you plan to run this
 
 # Usage
 
-Please execute the following script to generate figure:
-
-```Rscript script.r --input fmh_omega_7.csv --taxonomy species```
-
 You can always find usage instructions here:
 
 ```Rscript script.R --help```
@@ -103,6 +104,10 @@ You can always find usage instructions here:
 |---|---|
 | Input | This is a FracMinHash dN/dS csv file |
 | Taxonomy | The taxonomy information for species in input file |
+
+## Output
+
+An `output_[taxonomic level].png` file of the figure and a `output_[taxonomic level].csv` with the names of genomes and their pairwise FracMinHash dN/dS estimations will be produced. This is done because the script currently randomly chooses 100 estimations (50 dN/dS estimations < 1 and 50 dN/dS estimations > 1) to be represented in the figure. The blue represents negative selection (dN/dS<1) and the dark orange represents positive selection (dN/dS>1).
 
 <!--
 # Demo
