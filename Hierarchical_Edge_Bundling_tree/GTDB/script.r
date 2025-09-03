@@ -11,20 +11,24 @@ library(dplyr)
 library(tidyr)
 library(rlang)
 
+
+##### Defining variables #####
+
 # Define total random postive and negative estimations to be displayed in tree
 n=50 
-
 # Define the level of taxonomy (class, genus, family, etc))
-taxonomy_level_column<-"genus" # Can change to any other taxonomy levels such as family
+taxonomy_level_column<-"family" # Can change to any other taxonomy levels such as family
 # build the dynamic column names
 taxon_from_col <- sym(paste0(taxonomy_level_column, "_from"))
 taxon_to_col   <- sym(paste0(taxonomy_level_column, "_to"))
-
 # Define file path to genomic dnds values
 file_path <- "/data/jzr5814/sourmash_dnds_estimation/for_jinglin/fmh_omega_7.csv"
 
+###############################
+###############################
 
-# Step1: Read in the raw taxonomy files for both Archaea and Bacteria
+
+##### Step 1: Read in the raw taxonomy files for both Archaea and Bacteria #####
 # Taxonomy for Archaea (Read in the raw taxonomy file)
 archaea_taxonomy_raw <- read.csv('GTDB_taxonomy/ar53_taxonomy_r214.tsv', sep = '\t', header = FALSE)
 colnames(archaea_taxonomy_raw) <- c('Assembly ID', 'lineage')
@@ -33,7 +37,11 @@ colnames(archaea_taxonomy_raw) <- c('Assembly ID', 'lineage')
 bacteria_taxonomy_raw <- read.csv('GTDB_taxonomy/bac120_taxonomy_r214.tsv', sep = '\t', header = FALSE)
 colnames(bacteria_taxonomy_raw) <- c('Assembly ID', 'lineage')
 
-# Step 2: Clean the archaea taxonomy raw data
+###############################
+###############################
+
+
+##### Step 2: Clean the archaea taxonomy raw data #####
 archaea_taxonomy <- archaea_taxonomy_raw %>%
   mutate(`Assembly ID` = gsub("^.{2}_", "", `Assembly ID`)) %>%  # Remove first two characters and underscore
   mutate(root = "Root") %>%  # Add the "root" column with all values as "Root"
@@ -41,6 +49,7 @@ archaea_taxonomy <- archaea_taxonomy_raw %>%
   separate(lineage, into = c("superkingdom", "phylum", "class", "order", "family", "genus", "species"),
            sep = ";", remove = TRUE) %>%  # Split lineage into taxonomy columns
   mutate(across(superkingdom:species, ~ gsub("^[dpcfogs]__", "", .)))
+
 
 # Clean the bacteria taxonomy raw data
 bacteria_taxonomy <- bacteria_taxonomy_raw %>%
@@ -54,50 +63,65 @@ bacteria_taxonomy <- bacteria_taxonomy_raw %>%
 # Append the archaea and bacteria taxonomy data
 lineage_information_new <- rbind(archaea_taxonomy, bacteria_taxonomy)
 
+#colnames(lineage_information_new)
+#typeof(lineage_information_new)
+
 # Export to CSV
-# write.csv(lineage_information_new, file = "lineage_information_jzr.csv", row.names = FALSE, quote = FALSE)
+#write.csv(lineage_information_new, file = "lineage_information.csv", row.names = FALSE, quote = FALSE)
 
-# Step 3: Clean the 'query_name_x' and 'match_name_x' columns in the 'fmh_omega_7' dataset
+###############################
+###############################
 
+
+##### Step 3: Clean the 'query_name_x' and 'match_name_x' columns in the 'dnds_results' dataset #####
 
 # Read the CSV file
-fmh_omega_7 <- read.csv(file_path, sep = ",", header = TRUE)
-
+dnds_results <- read.csv(file_path, sep = ",", header = TRUE)
 
 # Modify 'query_name_x' and 'match_name_x' columns to remove the first two characters and underscore
-fmh_omega_7$query_name <- sapply(strsplit(as.character(fmh_omega_7$query_name), "_"), function(x) paste(x[-1], collapse = "_"))
-fmh_omega_7$match_name <- sapply(strsplit(as.character(fmh_omega_7$match_name), "_"), function(x) paste(x[-1], collapse = "_"))
+dnds_results$query_name <- sapply(strsplit(as.character(dnds_results$query_name), "_"), function(x) paste(x[-1], collapse = "_"))
+dnds_results$match_name <- sapply(strsplit(as.character(dnds_results$match_name), "_"), function(x) paste(x[-1], collapse = "_"))
 
 # Filter rows where 'query_name_x' and 'match_name_x' are in the column "Assembly ID" of lineage_information_new
-fmh_omega_7_short <- fmh_omega_7[
-  fmh_omega_7$query_name %in% lineage_information_new$`Assembly ID` &
-  fmh_omega_7$match_name %in% lineage_information_new$`Assembly ID`,
+dnds_results_modified <- dnds_results[
+  dnds_results$query_name %in% lineage_information_new$`Assembly ID` &
+  dnds_results$match_name %in% lineage_information_new$`Assembly ID`,
 ]
 
-# Select specific columns: 'query_name_x', 'match_name_x', and 'dN/dS'
-fmh_omega_7_short <- fmh_omega_7_short[, c("query_name", "match_name", "dN.dS")]
+#colnames(lineage_information_new)
+#typeof(lineage_information_new)
 
+# Select specific columns: 'query_name_x', 'match_name_x', and 'dN/dS'
+dnds_results_modified <- dnds_results_modified[, c("query_name", "match_name", "dN.dS")]
 
 # Export to CSV
-# write.csv(fmh_omega_7_short, file = "fmh_omega_7_short_jzr.csv", row.names = FALSE, quote = FALSE)
+#write.csv(dnds_results_modified, file = "dnds_results_modified.csv", row.names = FALSE, quote = FALSE)
+
+###############################
+###############################
 
 
-# Step 4: Clean taxonomy and dnds datasets, selecting columns that are needed
-taxonomy <- read.csv('lineage_information_jzr.csv')
-dnds <- read.csv('fmh_omega_7_short_jzr.csv')
+##### Step 4: Clean taxonomy and dnds datasets, selecting columns that are needed #####
+#taxonomy <- read.csv('lineage_information_jzr.csv')
+#colnames(taxonomy)
+#typeof(taxonomy)
+#dnds <- read.csv('fmh_omega_7_short_jzr.csv') #this can be erased # deprecated
 
-dnds <- dnds %>%
+dnds <- dnds_results_modified %>%                    # change dnds with dnds_results_modified
   filter(!is.na(dN.dS)) %>%
   rename(from = query_name, to = match_name, dndsvalue = dN.dS) %>%
   select(from, to, dndsvalue)
 
 
 # Keep only Assembly.ID present in dnds$query_name_x or dnds$match_name_x
-taxonomy_selected <- taxonomy %>%
-  filter(Assembly.ID %in% unique(c(dnds$from, dnds$to)))
+taxonomy_selected <- lineage_information_new %>% # change taxononmy with lineage_information_new
+  filter(`Assembly ID` %in% unique(c(dnds$from, dnds$to)))
+
+###############################
+###############################
 
 
-# # Step 5: Check for mutual pairs such as from genome A to genome B and from genome B to genome A in dnds dataset
+##### Step 5: Check for mutual pairs such as from genome A to genome B and from genome B to genome A in dnds dataset #####
 mutual_check <- merge(dnds, dnds, by.x = c("from", "to"), by.y = c("to", "from"))
 
 # Output the result
@@ -108,7 +132,12 @@ if (nrow(mutual_check) > 0) {
   print("No mutual connections found.")
 }
 
-# # Step 6: # Find out all genomes ids that are in the isolated pair. 
+###############################
+###############################
+
+
+##### Step 6: # Find out all genomes ids that are in the isolated pair #####
+
 # The isolated pair here means each genome in this pair only connects to other genomes that only exists in this pair
 
 # Create an undirected graph from the edge list
@@ -140,7 +169,11 @@ for (comp in components_of_size_two) {
 # Remove duplicate entries
 isolated_genomes <- unique(isolated_genomes)
 
+###############################
+###############################
 
+
+##### deprecated #####
 # # Step 7: # Based on the dnds dataset, removing all species that contained isolated_genomes ID in Step 6 
 # since we do not want to show gemones that connects only one another genome in the visualization
 # filter dnds to keep the visulation clean
@@ -150,12 +183,16 @@ isolated_genomes <- unique(isolated_genomes)
   # filter(dndsvalue > 1)
   # filter(dndsvalue >= 1.1 & dndsvalue <= 2)
 
+###############################
+###############################
 
-# Let's randomly sort so that the dataset isnt so big
-# Step 1: Filter to exclude isolated genomes
+
+##### Step 7: Let's randomly sort and randomly choose so that the dataset isnt so big #####
+
+# Filter to exclude isolated genomes
 connect_temp <- dnds[!(dnds$from %in% isolated_genomes), ]
 
-# Step 2: Randomly select 50 rows for each dnds range
+# Randomly select 50 rows for each dnds range
 n=50
 set1 <- connect_temp %>%
   filter(dndsvalue >= 0.4, dndsvalue <= 0.9) %>%
@@ -165,47 +202,36 @@ set2 <- connect_temp %>%
   filter(dndsvalue >= 1.1, dndsvalue <= 2) %>%
   sample_n(n)
 
-# Step 3: Combine the two sets
+# Combine the two sets
 connect <- bind_rows(set1, set2)
+connect_csv_file <- paste0("connect_", taxonomy_level_column, ".csv")
+readr::write_csv(connect, connect_csv_file)
 
-# (Optional) View
-#connect
+###############################
+###############################
 
-  
 
-# Step 8: Merge taxonomy information with the 'connect' dataset to 
+##### Step 8: Merge taxonomy information with the 'connect' dataset to #####
+
 # ensure both genome A and genome B have taxonomy information for a given taxonomic level such as genus
 
-# Merge taxonomy information for the 'from' column
-#connect_with_from <- connect %>%
-#  left_join(taxonomy_selected, by = c("from" = "Assembly.ID")) %>%
-#  rename(root_from = root, 
-#         superkingdom_from = superkingdom, 
-#         phylum_from = phylum, 
-#         class_from = class, 
-#         order_from = order, 
-#         family_from = family, 
-#         genus_from = genus, 
-#         species_from = species)
-
-# CHANGED: Build two renamed copies of taxonomy and join twice
-tax_cols <- c("root","superkingdom","phylum","class","order","family","genus","species")  # CHANGED: helper list
+tax_cols <- c("root","superkingdom","phylum","class","order","family","genus","species")  
 
 tax_to <- taxonomy_selected %>%
-  rename(Assembly.ID_to = Assembly.ID) %>%                                         # CHANGED
-  rename_with(~ paste0(.x, "_to"), all_of(tax_cols))                                # CHANGED
+  rename(Assembly.ID_to = `Assembly ID`) %>%                                         
+  rename_with(~ paste0(.x, "_to"), all_of(tax_cols))                                
 
 tax_from <- taxonomy_selected %>%
-  rename(Assembly.ID_from = Assembly.ID) %>%                                       # CHANGED
-  rename_with(~ paste0(.x, "_from"), all_of(tax_cols))                              # CHANGED
+  rename(Assembly.ID_from = `Assembly ID`) %>%                                       
+  rename_with(~ paste0(.x, "_from"), all_of(tax_cols))                              
 
-# CHANGED: join taxonomy for BOTH ends so *_from columns exist
+# join taxonomy for BOTH ends so *_from columns exist
 connect_with_taxonomy <- connect %>%
-  left_join(tax_from, by = c("from" = "Assembly.ID_from")) %>%                      # CHANGED
-  left_join(tax_to,   by = c("to"   = "Assembly.ID_to")) %>%                        # CHANGED
+  left_join(tax_from, by = c("from" = "Assembly.ID_from")) %>%                      
+  left_join(tax_to,   by = c("to"   = "Assembly.ID_to")) %>%                        
   mutate(
-    taxon_from = !!taxon_from_col,                                                  # CHANGED: dynamic pick
-    taxon_to   = !!taxon_to_col                                                     # CHANGED: dynamic pick
+    taxon_from = !!taxon_from_col,                                                  
+    taxon_to   = !!taxon_to_col                                                     
   )
 
 # Now your filtering works because superkingdom_from/_to and taxon_from/_to exist
@@ -224,32 +250,38 @@ connect_with_taxonomy_updated_same_genus <- connect_with_taxonomy_updated %>%
 
 
 # write to csv
-#write.csv(connect_with_taxonomy_updated_same_genus, file = "dnds_0.8_1_same_genus_jzr.csv", row.names = FALSE, quote = FALSE)
+# write.csv(connect_with_taxonomy_updated_same_genus, file = "dnds_0.8_1_same_genus_jzr.csv", row.names = FALSE, quote = FALSE)
+
+###############################
+###############################
 
 
-# Step 9: Clean the taxonomy_selected df to keep only the nodes (valid nodes) that are present 
+##### Step 9: Clean the taxonomy_selected df to keep only the nodes (valid nodes) that are present #####
 # in the filtered connect df in Step 8
-taxonomy_selected_final <- taxonomy_selected[taxonomy_selected$Assembly.ID %in% unique(c(connect_with_taxonomy_updated$from, connect_with_taxonomy_updated$to)), ]
+taxonomy_selected_final <- taxonomy_selected[taxonomy_selected$`Assembly ID` %in% unique(c(connect_with_taxonomy_updated$from, connect_with_taxonomy_updated$to)), ]
 cat("Number of valid nodes:", nrow(taxonomy_selected_final), "\n")
 
+###############################
+###############################
 
-# Step 10: Create hierarcy and vertices for hierarchical edge bundling visualization
+
+##### Step 10: Create hierarcy and vertices for hierarchical edge bundling visualization #####
 
 # Add a root column to the taxonomy data, reshape the data into long format
 taxonomy_long <- taxonomy_selected_final %>%
-  select(Assembly.ID, root, superkingdom, phylum, class, order, family, genus, species) %>%
+  select(`Assembly ID`, root, superkingdom, phylum, class, order, family, genus, species) %>%
   mutate(root = if_else(root == "cellular organisms", "Root", root)) %>%
       # Create hierarchical relationships
-  pivot_longer(cols = c(root, superkingdom, phylum, class, order, family, genus, species, Assembly.ID),
+  pivot_longer(cols = c(root, superkingdom, phylum, class, order, family, genus, species, `Assembly ID`),
                names_to = "level",
                values_to = "name") %>%
-  mutate(genome_id = rep(taxonomy_selected_final$Assembly.ID, each = 9)) # 9 is the numbers of columns in taxonomy_selected
+  mutate(genome_id = rep(taxonomy_selected_final$`Assembly ID`, each = 9)) # 9 is the numbers of columns in taxonomy_selected
 
   # Create hierarchical relationships
 hierarchy <- taxonomy_long %>%
 
   # sorting taxomomic level within each genome ("genome_id")
-  arrange(genome_id, match(level, c("root", "superkingdom", "phylum", "class", "order", "family", "genus", "species", "Assembly.ID"))) %>%
+  arrange(genome_id, match(level, c("root", "superkingdom", "phylum", "class", "order", "family", "genus", "species", "Assembly ID"))) %>%
   group_by(genome_id) %>%
 
   # from = lag(name): Take the value from the previous row in the column "name" and assigns it to a new column called from, 
@@ -272,7 +304,11 @@ mygraph <- graph_from_data_frame(hierarchy, vertices = vertices)
 from <- match(connect_with_taxonomy_updated$from, vertices$name)
 to <- match(connect_with_taxonomy_updated$to, vertices$name)
 
-# Step 11: Retain layout data for only the nodes that are connected by valid edges
+###############################
+###############################
+
+
+##### Step 11: Retain layout data for only the nodes that are connected by valid edges #####
 # create the layout so we can feed to to get_con and manipulate the data frame directly for plotting
 layout_data <- create_layout(mygraph, layout = 'dendrogram', circular = TRUE)
 
@@ -290,14 +326,18 @@ conn_data_frame <- conn_data_frame[!is.na(conn_data_frame$con.value), ]
 
 sum(conn_data_frame$leaf == 'TRUE')
 
-# Step 12: Determine the coordinates of the genus label
+###############################
+###############################
+
+
+##### Step 12: Determine the coordinates of the genus label #####
 genome_coordinate<-unique(conn_data_frame[conn_data_frame$leaf == TRUE, c('name','x','y')])
 
 genome_coordinate_info <- merge(
   genome_coordinate, 
-  taxonomy_selected_final[, c("Assembly.ID", "phylum", "class", "order", "family", "genus", "species")],
+  taxonomy_selected_final[, c("Assembly ID", "phylum", "class", "order", "family", "genus", "species")],
   by.x = "name", 
-  by.y = "Assembly.ID", 
+  by.y = "Assembly ID", 
   all.x = TRUE
 )
 
@@ -327,13 +367,11 @@ assign(centers_name, calculate_taxon_centers(genome_coordinate_info,
 cat("Number of unique", taxonomy_level_column, "groups:", nrow(taxon_centers), "\n")
 
 # node labels
-
-# CHANGED: compute angle-based label positioning (rotate + flip) for group centers
 taxon_centers <- taxon_centers %>%
   mutate(
     # raw angle in degrees from center (0 deg = +x axis, increases ccw)
     angle = atan2(center_y, center_x) * 180 / pi,
-    angle = if_else(angle < 0, angle + 360, angle),   # keep in [0, 360)
+    angle = if_else(angle < 0, angle + 360, angle),   
 
     # flip labels on the left side so they are upright
     hjust = if_else(angle > 90 & angle < 270, 1, 0),
@@ -344,11 +382,13 @@ taxon_centers <- taxon_centers %>%
     label_y = center_y * 1.15
   )
 
+###############################
+###############################
 
 
-# Step 13a: Generate a graph based on genomes and their dN/dS values, labelling each dot on the circle represents a genome
+##### Step 13: Generate a graph based on genomes and their dN/dS values, labelling each dot on the circle represents a genome #####
 
-ggraph(mygraph, layout = 'dendrogram', circular = TRUE) + 
+p <- ggraph(mygraph, layout = 'dendrogram', circular = TRUE) + 
   geom_conn_bundle(
     data = conn_data_frame, 
     alpha = 0.8, 
@@ -358,15 +398,15 @@ ggraph(mygraph, layout = 'dendrogram', circular = TRUE) +
 geom_text(
     data = taxon_centers,
     aes(
-      x = label_x,                 # CHANGED: use pre-scaled label coordinates
-      y = label_y,                 # CHANGED
+      x = label_x,                
+      y = label_y,                 
       label = !!sym(taxonomy_level_column),
-      angle = angle_text,          # CHANGED: rotated text
-      hjust = hjust                # CHANGED: flip alignment left vs right
+      angle = angle_text,          
+      hjust = hjust         
     ),
     size = 2,
     alpha = 1,
-    check_overlap = TRUE           # CHANGED: optional - helps avoid heavy overplotting
+    check_overlap = TRUE         
   ) +
   geom_node_point(
     aes(
@@ -379,15 +419,28 @@ geom_text(
   scale_edge_colour_gradient2(
     low = "blue",
     mid = "white",
-    high = "red",
+    high = "darkorange",
     midpoint = 1,
-    name = "Genomic dN/dS"
+    name = "FracMinHash dN/dS"
   ) +
   scale_size_continuous(range = c(1, 3)) +
   theme_void() +
   theme(
-    plot.margin = margin(t = 10, r = 10, b = 10, l = 10)  # ADD THIS
+    plot.margin = margin(5, 12, 5, 12),   
+    legend.position = "bottom",             
+    legend.justification = "right",         
+    legend.box.just = "right",
+    legend.direction = "horizontal",
+    panel.background = element_rect(fill = "white", colour = NA),  
+    plot.background  = element_rect(fill = "white", colour = NA)    
   ) +
-  expand_limits(x = c(-1.3, 1.3), y = c(-1.3, 1.3))
+  expand_limits(x = c(-1.8, 1.8), y = c(-1.8, 1.8))
 
+###############################
+###############################
+
+
+##### Step 14: Save as a png #####
+png_file <- paste0("output_", taxonomy_level_column, ".png")
+ggsave(png_file, plot = p, width = 10, height = 10, dpi = 300)
 
