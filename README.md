@@ -2,7 +2,7 @@
 
 Hierarchical edge bundling is an easy way to display quantitative pairwise relationships among thousands of genomes [1]. Here, we use the Hierarchical Edge Bundling R Package to present genomic dN/dS estimations between archaeal and bacterial genomes from the Genome Taxonomy Database, where red and blue represent positive and negative selection, respectively. Please find the reproducible script to generate the Hierarchical Edge Bundling Figure presented in manuscript for "Leveraging FracMinHash Containment for Genomic dN/dS". 
 
-![Figure](./Hierarchical_Edge_Bundling_tree/GTDB/output_species.png)
+![Figure](./figures/output_species.png)
 
 # Table of contents
 
