@@ -1,4 +1,4 @@
-# Hierarchical Edge Bundling of Genomic dN/dS
+# Hierarchical Edge Bundling of FracMinHash dN/dS (also a dN/dS genomic level estimation)
 
 Hierarchical edge bundling is an easy way to display quantitative pairwise relationships among thousands of genomes [1]. Here, we use the Hierarchical Edge Bundling R Package to present genomic dN/dS estimations between archaeal and bacterial genomes from the Genome Taxonomy Database, where red and blue represent positive and negative selection, respectively. Please find the reproducible script to generate the Hierarchical Edge Bundling Figure presented in manuscript for "Leveraging FracMinHash Containment for Genomic dN/dS". 
 
@@ -72,7 +72,7 @@ We include the a FracMinHash dN/dS result to generate this figure.
 
 Note: Currently, this file is not available on the repo, if you plan to run this please reach out to [bioinfwithjudith](https://github.com/bioinfwithjudith).
 
-<!--Find it here: /data/jzr5814/sourmash_dnds_estimation/for_jinglin/fmh_omega_7.csv -->
+<!-- Find it here: /data/jzr5814/sourmash_dnds_estimation/for_jinglin/fmh_omega_7.csv -->
 
 | Column Name | Description |
 |---|---|
