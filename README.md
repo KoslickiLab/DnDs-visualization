@@ -70,6 +70,9 @@ We include the a FracMinHash dN/dS result to generate this figure.
 
 **Purpose:** This file contains the dN/dS values. dN/dS above 1 is postive selection (generally shown in red) and a dN/dS below 1 is negative selection (generally shown in blue). The most important columns here are A, B, and dNdS_ratio_constant.
 
+Note: Currently, this file is not available on the repo, if you plan to run this please reach out to [bioinfwithjudith](https://github.com/bioinfwithjudith).
+
+<!--Find it here: /data/jzr5814/sourmash_dnds_estimation/for_jinglin/fmh_omega_7.csv -->
 
 | Column Name | Description |
 |---|---|
