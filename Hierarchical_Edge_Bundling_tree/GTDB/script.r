@@ -63,11 +63,11 @@ taxon_to_col   <- sym(paste0(taxonomy_level_column, "_to"))
 
 ##### Step 1: Read in the raw taxonomy files for both Archaea and Bacteria #####
 # Taxonomy for Archaea (Read in the raw taxonomy file)
-archaea_taxonomy_raw <- read.csv('GTDB_taxonomy/ar53_taxonomy_r214.tsv', sep = '\t', header = FALSE)
+archaea_taxonomy_raw <- read.csv('ar53_taxonomy_r214.tsv', sep = '\t', header = FALSE)
 colnames(archaea_taxonomy_raw) <- c('Assembly ID', 'lineage')
 
 # Taxonomy for Bacteria (Read in the raw taxonomy file)
-bacteria_taxonomy_raw <- read.csv('GTDB_taxonomy/bac120_taxonomy_r214.tsv', sep = '\t', header = FALSE)
+bacteria_taxonomy_raw <- read.csv('bac120_taxonomy_r214.tsv', sep = '\t', header = FALSE)
 colnames(bacteria_taxonomy_raw) <- c('Assembly ID', 'lineage')
 
 ###############################
