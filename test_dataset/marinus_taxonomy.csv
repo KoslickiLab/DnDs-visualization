@@ -1,22 +1,3 @@
-NCBI_fasta_name,custom_fasta_name,phylum,class,order,family,genus,species,strain
-CP000435.1,S.CC9311,Cyanobacteriota,Cyanophyceae,Synechococcales,Synechococcaceae,Synechococcus,Synechococcus marinus,CC9311
-CP000110.1,S.CC9605,Cyanobacteriota,Cyanophyceae,Synechococcales,Synechococcaceae,Synechococcus,Synechococcus marinus,CC9605
-CP000097.1,S.CC9902,Cyanobacteriota,Cyanophyceae,Synechococcales,Synechococcaceae,Synechococcus,Synechococcus marinus,CC9902
-AP008231.1,S.PCC6301,Cyanobacteriota,Cyanophyceae,Synechococcales,Synechococcaceae,Synechococcus,Synechococcus marinus,PCC 6301
-CP000951.1,S.PCC7002,Cyanobacteriota,Cyanophyceae,Synechococcales,Synechococcaceae,Synechococcus,Synechococcus marinus,PCC 7002
-CP000100.1,S.PCC7942,Cyanobacteriota,Cyanophyceae,Synechococcales,Synechococcaceae,Synechococcus,Synechococcus marinus,PCC 7942
-CT978603.1,S.RCC307,Cyanobacteriota,Cyanophyceae,Synechococcales,Synechococcaceae,Synechococcus,Synechococcus marinus,RCC307
-CT971583.1,S.WH7803,Cyanobacteriota,Cyanophyceae,Synechococcales,Synechococcaceae,Synechococcus,Synechococcus marinus,WH7803
-BX548020.1,S.WH8102,Cyanobacteriota,Cyanophyceae,Synechococcales,Synechococcaceae,Synechococcus,Synechococcus marinus,WH 8102
-CP000551.1,P.AS9601,Cyanobacteriota,Cyanophyceae,Synechococcales,Prochlorococcaceae,Prochlorococcus,Prochlorococcus marinus,AS9601
-BX548174.1,P.MED4,Cyanobacteriota,Cyanophyceae,Synechococcales,Prochlorococcaceae,Prochlorococcus,Prochlorococcus marinus,MED4
-CP000878.1,P.MIT9211,Cyanobacteriota,Cyanophyceae,Synechococcales,Prochlorococcaceae,Prochlorococcus,Prochlorococcus marinus,MIT 9211
-CP000825.1,P.MIT9215,Cyanobacteriota,Cyanophyceae,Synechococcales,Prochlorococcaceae,Prochlorococcus,Prochlorococcus marinus,MIT 9215
-CP000576.1,P.MIT9301,Cyanobacteriota,Cyanophyceae,Synechococcales,Prochlorococcaceae,Prochlorococcus,Prochlorococcus marinus,MIT 9301
-CP000554.1,P.MIT9303,Cyanobacteriota,Cyanophyceae,Synechococcales,Prochlorococcaceae,Prochlorococcus,Prochlorococcus marinus,MIT 9303
-CP000111.1,P.MIT9312,Cyanobacteriota,Cyanophyceae,Synechococcales,Prochlorococcaceae,Prochlorococcus,Prochlorococcus marinus,MIT 9312
-BX548175.1,P.MIT9313,Cyanobacteriota,Cyanophyceae,Synechococcales,Prochlorococcaceae,Prochlorococcus,Prochlorococcus marinus,MIT9313
-CP000552.1,P.MIT9515,Cyanobacteriota,Cyanophyceae,Synechococcales,Prochlorococcaceae,Prochlorococcus,Prochlorococcus marinus,MIT 9515
-CP000553.1,P.NATL1A,Cyanobacteriota,Cyanophyceae,Synechococcales,Prochlorococcaceae,Prochlorococcus,Prochlorococcus marinus,NATL1A
-CP000095.2,P.NATL2A,Cyanobacteriota,Cyanophyceae,Synechococcales,Prochlorococcaceae,Prochlorococcus,Prochlorococcus marinus,NATL2A
-AE017126.1,P.CCMP1375,Cyanobacteriota,Cyanophyceae,Synechococcales,Prochlorococcaceae,Prochlorococcus,Prochlorococcus marinus,CCMP1375
+version https://git-lfs.github.com/spec/v1
+oid sha256:5542413640f81d7a2cb457a0809439fc1dfce4a851d84a5d5dd1cd4cee0ff7f8
+size 2808
