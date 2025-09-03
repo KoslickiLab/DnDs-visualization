@@ -12,17 +12,55 @@ library(tidyr)
 library(rlang)
 
 
+##### Arguments #####
+
+suppressPackageStartupMessages({
+  library(optparse)
+})
+
+# Define options
+option_list <- list(
+  make_option(c("-t", "--taxonomy"), type="character", default="family",
+              help="Taxonomy level: one of root, superkingdom, phylum, class, order, family, genus, species [default: %default]"),
+  make_option(c("-i", "--input"), type="character", 
+              help="Path to input CSV file with dN/dS estimates (required)")
+)
+
+# Parse options
+opt <- parse_args(OptionParser(option_list=option_list))
+
+# Validate inputs
+if (is.null(opt$input)) {
+  stop("You must provide an input file with -i or --input", call.=FALSE)
+}
+valid_taxa <- c("root","superkingdom","phylum","class","order","family","genus","species")
+if (!(opt$taxonomy %in% valid_taxa)) {
+  stop(sprintf("Invalid taxonomy level '%s'. Must be one of: %s",
+               opt$taxonomy, paste(valid_taxa, collapse=", ")), call.=FALSE)
+}
+
+# Assign variables used in rest of your script
+taxonomy_level_column <- opt$taxonomy
+file_path <- opt$input
+
+print(paste("FracMinHash results from:", file_path))
+print(paste("Taxonomy class:", taxonomy_level_column))
+
+###############################
+###############################
+
+
 ##### Defining variables #####
 
 # Define total random postive and negative estimations to be displayed in tree
 n=50 
 # Define the level of taxonomy (class, genus, family, etc))
-taxonomy_level_column<-"family" # Can change to any other taxonomy levels such as family
+#taxonomy_level_column<-"family" # Can change to any other taxonomy levels such as family
 # build the dynamic column names
 taxon_from_col <- sym(paste0(taxonomy_level_column, "_from"))
 taxon_to_col   <- sym(paste0(taxonomy_level_column, "_to"))
 # Define file path to genomic dnds values
-file_path <- "/data/jzr5814/sourmash_dnds_estimation/for_jinglin/fmh_omega_7.csv"
+#file_path <- "/data/jzr5814/sourmash_dnds_estimation/for_jinglin/fmh_omega_7.csv"
 
 ###############################
 ###############################
@@ -324,7 +362,7 @@ conn_data_frame$con.value <- connect_with_taxonomy_updated$dndsvalue[conn_data_f
 # Remove invalid connections where genomes are not in connect_new
 conn_data_frame <- conn_data_frame[!is.na(conn_data_frame$con.value), ]
 
-sum(conn_data_frame$leaf == 'TRUE')
+#sum(conn_data_frame$leaf == 'TRUE')
 
 ###############################
 ###############################
