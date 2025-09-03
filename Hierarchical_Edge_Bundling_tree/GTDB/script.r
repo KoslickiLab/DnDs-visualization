@@ -1,6 +1,6 @@
 setwd('.')
 
-# Switch to R
+##### Libraries
 library(tidyverse)
 library(viridis)
 library(patchwork)
@@ -13,7 +13,6 @@ library(rlang)
 
 
 ##### Arguments #####
-
 suppressPackageStartupMessages({
   library(optparse)
 })
@@ -54,13 +53,9 @@ print(paste("Taxonomy class:", taxonomy_level_column))
 
 # Define total random postive and negative estimations to be displayed in tree
 n=50 
-# Define the level of taxonomy (class, genus, family, etc))
-#taxonomy_level_column<-"family" # Can change to any other taxonomy levels such as family
 # build the dynamic column names
 taxon_from_col <- sym(paste0(taxonomy_level_column, "_from"))
 taxon_to_col   <- sym(paste0(taxonomy_level_column, "_to"))
-# Define file path to genomic dnds values
-#file_path <- "/data/jzr5814/sourmash_dnds_estimation/for_jinglin/fmh_omega_7.csv"
 
 ###############################
 ###############################
@@ -101,12 +96,6 @@ bacteria_taxonomy <- bacteria_taxonomy_raw %>%
 # Append the archaea and bacteria taxonomy data
 lineage_information_new <- rbind(archaea_taxonomy, bacteria_taxonomy)
 
-#colnames(lineage_information_new)
-#typeof(lineage_information_new)
-
-# Export to CSV
-#write.csv(lineage_information_new, file = "lineage_information.csv", row.names = FALSE, quote = FALSE)
-
 ###############################
 ###############################
 
@@ -126,24 +115,14 @@ dnds_results_modified <- dnds_results[
   dnds_results$match_name %in% lineage_information_new$`Assembly ID`,
 ]
 
-#colnames(lineage_information_new)
-#typeof(lineage_information_new)
-
 # Select specific columns: 'query_name_x', 'match_name_x', and 'dN/dS'
 dnds_results_modified <- dnds_results_modified[, c("query_name", "match_name", "dN.dS")]
-
-# Export to CSV
-#write.csv(dnds_results_modified, file = "dnds_results_modified.csv", row.names = FALSE, quote = FALSE)
 
 ###############################
 ###############################
 
 
 ##### Step 4: Clean taxonomy and dnds datasets, selecting columns that are needed #####
-#taxonomy <- read.csv('lineage_information_jzr.csv')
-#colnames(taxonomy)
-#typeof(taxonomy)
-#dnds <- read.csv('fmh_omega_7_short_jzr.csv') #this can be erased # deprecated
 
 dnds <- dnds_results_modified %>%                    # change dnds with dnds_results_modified
   filter(!is.na(dN.dS)) %>%
@@ -210,21 +189,6 @@ isolated_genomes <- unique(isolated_genomes)
 ###############################
 ###############################
 
-
-##### deprecated #####
-# # Step 7: # Based on the dnds dataset, removing all species that contained isolated_genomes ID in Step 6 
-# since we do not want to show gemones that connects only one another genome in the visualization
-# filter dnds to keep the visulation clean
-# connect <- dnds[!(dnds$from %in% isolated_genomes), ] %>%
-  # filter((dndsvalue >= 0.7 & dndsvalue <= 0.9 | dndsvalue >= 1.1 & dndsvalue <= 3))
-  # filter(dndsvalue > 0.8 & dndsvalue < 1)
-  # filter(dndsvalue > 1)
-  # filter(dndsvalue >= 1.1 & dndsvalue <= 2)
-
-###############################
-###############################
-
-
 ##### Step 7: Let's randomly sort and randomly choose so that the dataset isnt so big #####
 
 # Filter to exclude isolated genomes
@@ -285,10 +249,6 @@ cat("Number of valid edges (with positions):", nrow(connect_with_taxonomy_update
 connect_with_taxonomy_updated_same_genus <- connect_with_taxonomy_updated %>%
   filter(taxon_from == taxon_to) %>%
   arrange(taxon_from)
-
-
-# write to csv
-# write.csv(connect_with_taxonomy_updated_same_genus, file = "dnds_0.8_1_same_genus_jzr.csv", row.names = FALSE, quote = FALSE)
 
 ###############################
 ###############################
@@ -361,8 +321,6 @@ conn_data_frame$con.value <- connect_with_taxonomy_updated$dndsvalue[conn_data_f
 
 # Remove invalid connections where genomes are not in connect_new
 conn_data_frame <- conn_data_frame[!is.na(conn_data_frame$con.value), ]
-
-#sum(conn_data_frame$leaf == 'TRUE')
 
 ###############################
 ###############################
