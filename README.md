@@ -42,7 +42,9 @@ pip install -r requirements.txt
 
 Please execute the following script to generate figure:
 
-```Rscript script.r --input fmh_omega_7.csv --taxonomy species```
+```
+Rscript script.r --input fmh_omega_7.csv --taxonomy species
+```
 
 Note: Currently, this file is not available on the repo, if you plan to run this please reach out to [bioinfwithjudith](https://github.com/bioinfwithjudith).
 
@@ -104,7 +106,9 @@ Note: Currently, this file is not available on the repo, if you plan to run this
 
 You can always find usage instructions here:
 
-```Rscript script.R --help```
+```
+Rscript script.R --help
+```
 
 | Argument | Description |
 |---|---|
